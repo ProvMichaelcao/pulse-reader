@@ -5,16 +5,100 @@
       "extends": "OpenCVFilter",
       "doc": "PulseReader interface. Documentation about the module",
       "constructor": {
-	"doc": "Create an element",
-	"params": [
-	  {
-	    "name": "mediaPipeline",
-	    "doc": "the parent :rom:cls:`MediaPipeline`",
-	    "type": "MediaPipeline",
-	    "final": true
-	  }
-	]
-      }
+				"doc": "Create an element",
+				"params": [
+				  {
+				    "name": "mediaPipeline",
+				    "doc": "the parent :rom:cls:`MediaPipeline`",
+				    "type": "MediaPipeline",
+				    "final": true
+				  },
+				  {
+				  	"name": "overlay",
+				  	"doc": "whether to start filter with overlay",
+				  	"type": "boolean",
+				  	"optional": true,
+				  	"defaultValue": false
+				  }
+				]
+			},
+			"methods": [
+				{
+					"name": "setOverlay",
+					"doc": "configures whether there is any annotated overlay",
+					"params": [
+						{
+							"name": "overlaySet",
+							"doc": "whether overlay is active",
+							"type": "boolean"
+						}
+					]
+				}
+			],
+			"events": [
+				"PulseDetected",
+				"PulseUndetected",
+				"FrameData"
+			]
     }
+  ],
+  "events": [
+  	{
+  		"properties": [
+  			{
+  				"name": "time",
+  				"doc": "timestamp for PulseDetected",
+  				"type": "int"
+  			},
+  			{
+  				"name": "data",
+  				"doc": "other data represented in a JSON string",
+  				"type": "String"
+  			}
+  		],
+  		"extends": "Media",
+  		"name": "PulseDetected",
+  		"doc": "event generated when a pulse is detected."
+  	},
+  	{
+  		"properties": [
+  			{
+  				"name": "time",
+  				"doc": "timestamp for PulseUndetected",
+  				"type": "int"
+  			},
+  			{
+  				"name": "data",
+  				"doc": "other data represented in a JSON string",
+  				"type": "String"
+  			}
+  		],
+  		"extends": "Media",
+  		"name": "PulseUndetected",
+  		"doc": "event generated when a pulse is lost."
+  	},
+  	{
+  		"properties": [
+  			{
+  				"name": "bpm",
+  				"doc": "float value to represent current detected bpm 
+  								(if available, otherwise 0)",
+  				"type": "float"
+  			},
+  			{
+  				"name": "id",
+  				"doc": "int to represent caller number",
+  				"type": "int"
+  			},
+  			{
+  				"name": "data",
+  				"doc": "other data represented in a JSON string",
+  				"type": "String"
+  			}
+  		],
+  		"extends": "Media",
+  		"name": "FrameData",
+  		"doc": "per frame update to bpm and other things"
+  	}
   ]
 }
