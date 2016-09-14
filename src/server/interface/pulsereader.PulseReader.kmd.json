@@ -14,6 +14,11 @@
 				    "final": true
 				  },
 				  {
+				  	"name": "id",
+				  	"doc": "int to identify endpoint",
+				  	"type": "int"
+				  },
+				  {
 				  	"name": "overlay",
 				  	"doc": "whether to start filter with overlay",
 				  	"type": "boolean",
@@ -31,6 +36,17 @@
 							"name": "overlaySet",
 							"doc": "whether overlay is active",
 							"type": "boolean"
+						}
+					]
+				},
+				{
+					"name": "setId",
+					"doc": "sets the id of this endpoint",
+					"params": [
+						{
+							"name": "id",
+							"doc": "new id",
+							"type": "int"
 						}
 					]
 				}
@@ -52,7 +68,7 @@
   			},
   			{
   				"name": "data",
-  				"doc": "other data represented in a JSON string",
+  				"doc": "other data represented in a string",
   				"type": "String"
   			}
   		],
@@ -69,7 +85,7 @@
   			},
   			{
   				"name": "data",
-  				"doc": "other data represented in a JSON string",
+  				"doc": "other data represented in a string",
   				"type": "String"
   			}
   		],
@@ -92,7 +108,7 @@
   			},
   			{
   				"name": "data",
-  				"doc": "other data represented in a JSON string",
+  				"doc": "other data represented in a string",
   				"type": "String"
   			}
   		],

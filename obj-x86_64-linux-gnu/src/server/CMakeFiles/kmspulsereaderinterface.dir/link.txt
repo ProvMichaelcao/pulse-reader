@@ -1,0 +1,2 @@
+/usr/bin/ar cr libkmspulsereaderinterface.a  CMakeFiles/kmspulsereaderinterface.dir/interface/generated-cpp/PulseReaderInternal.cpp.o CMakeFiles/kmspulsereaderinterface.dir/interface/generated-cpp/PulseReader.cpp.o CMakeFiles/kmspulsereaderinterface.dir/interface/generated-cpp/PulseDetected.cpp.o CMakeFiles/kmspulsereaderinterface.dir/interface/generated-cpp/PulseUndetected.cpp.o CMakeFiles/kmspulsereaderinterface.dir/interface/generated-cpp/FrameData.cpp.o
+/usr/bin/ranlib libkmspulsereaderinterface.a

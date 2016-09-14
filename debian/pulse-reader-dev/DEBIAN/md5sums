@@ -1,0 +1,12 @@
+03dcd328b22ec2c615b4b92ed75827d7  usr/include/kurento/modules/pulsereader/FrameData.hpp
+aa76542026b92c8e47320f758ab8914f  usr/include/kurento/modules/pulsereader/PulseDetected.hpp
+a25277cae14d279003b4497367053344  usr/include/kurento/modules/pulsereader/PulseReader.hpp
+fde8b1f847f5c78d08e1094c1e1c69c1  usr/include/kurento/modules/pulsereader/PulseReaderImpl.hpp
+763293d0d04e8a39f639727b5d7b2615  usr/include/kurento/modules/pulsereader/PulseReaderImplFactory.hpp
+609b09452eb3641b8c01a4e2f5925a15  usr/include/kurento/modules/pulsereader/PulseReaderOpenCVImpl.hpp
+3009efaeb5b58afb6debfc98e421c3a0  usr/include/kurento/modules/pulsereader/PulseUndetected.hpp
+fc84a7497e6fcfa04e100cc06ed205b9  usr/lib/x86_64-linux-gnu/pkgconfig/kmspulsereader.pc
+1a6c43881c7c23a295a8a9fc7838a00f  usr/share/cmake-2.8/Modules/FindKMSPULSEREADER.cmake
+c58993ae1d181c87c39dd4e910a86510  usr/share/doc/pulse-reader-dev/changelog.gz
+d41d8cd98f00b204e9800998ecf8427e  usr/share/doc/pulse-reader-dev/copyright
+a3e94d57fb0b4bc9e9fc078590227af3  usr/share/kurento/modules/pulsereader.kmd.json

@@ -1,0 +1,10 @@
+Package: pulse-reader-dev
+Source: pulse-reader
+Version: 0.0.1~rc1
+Architecture: amd64
+Maintainer: Maintainer Name
+Installed-Size: 92
+Depends: pulse-reader (= 0.0.1~rc1), kms-core-6.0-dev, kms-elements-6.0-dev, kms-filters-6.0-dev, libopencv-dev
+Section: utils
+Priority: optional
+Description: dev package description

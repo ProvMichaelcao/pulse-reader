@@ -1,0 +1,6 @@
+# Hashes of file build rules.
+f8f1ec78934626e487bf745d1eeb4246 src/server/cpp_interface.generated
+333b9a2d7f7542e4aaa528761cb0b905 src/server/cpp_interface_internal.generated
+908cc19f66280e2f1d32a676237c5a38 src/server/cpp_module.generated
+98f723c930a45c7fb1fafde117f9a9f5 src/server/cpp_server_internal.generated
+ac329643364da76ef276e597d75e7ea0 src/server/pulsereader.kmd.json

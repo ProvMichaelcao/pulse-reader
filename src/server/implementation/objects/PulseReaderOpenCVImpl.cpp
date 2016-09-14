@@ -2,6 +2,91 @@
 
 #include "PulseReaderOpenCVImpl.hpp"
 #include <KurentoException.hpp>
+#include <sstream>
+#include "MediaPipeline.hpp"
+#include "MediaPipelineImpl.hpp"
+#include <gst/gst.h>
+
+using std::stringstream;
+using namespace cv;
+using std::cout;
+using std::endl;
+using std::string;
+
+namespace cv{
+	void normalization(InputArray _a, OutputArray _b) {
+   _a.getMat().copyTo(_b);
+    Mat b = _b.getMat();
+    Scalar mean, stdDev;
+    meanStdDev(b, mean, stdDev);
+    b = (b - mean[0]) / stdDev[0];	
+  }
+  void meanFilter(InputArray _a, OutputArray _b, size_t n, Size s) {
+   _a.getMat().copyTo(_b);
+    Mat b = _b.getMat();
+    for (size_t i = 0 ; i < n; i++) {
+        blur(b, b, s);
+    }
+	}
+	void interpolate(const Rect& a, const Rect& b, Rect& c, double p) {
+    double np = 1 - p;
+    c.x = a.x * np + b.x * p + 0.5;
+    c.y = a.y * np + b.y * p + 0.5;
+    c.width = a.width * np + b.width * p + 0.5;
+    c.height = a.height * np + b.height * p + 0.5;
+	}
+	void printMatInfo(const string& name, InputArray _a) {
+	Mat a = _a.getMat();
+  cout << name << ": " << a.rows << "x" << a.cols
+			    << " channels=" << a.channels()
+			    << " depth=" << a.depth()
+			    << " isContinuous=" << (a.isContinuous() ? "true" : "false")
+			    << " isSubmatrix=" << (a.isSubmatrix() ? "true" : "false") << endl;
+		} 
+}
+
+EvmGdownIIR::EvmGdownIIR() {
+  first = true;
+  blurredSize = Size(10, 10);
+  fLow = 70/60./10;
+  fHigh = 80/60./10;
+  alpha = 200;
+}
+
+EvmGdownIIR::~EvmGdownIIR() {
+}
+
+void EvmGdownIIR::onFrame(const Mat& src, Mat& out) {
+  // convert to float
+  src.convertTo(srcFloat, CV_32F);
+
+  // apply spatial filter: blur and downsample
+  resize(srcFloat, blurred, blurredSize, 0, 0, CV_INTER_AREA);
+
+  if (first) {
+    first = false;
+    blurred.copyTo(lowpassHigh);
+    blurred.copyTo(lowpassLow);
+    src.copyTo(out);
+  } else {
+    // apply temporal filter: subtraction of two IIR lowpass filters
+    lowpassHigh = lowpassHigh * (1-fHigh) + fHigh * blurred;
+    lowpassLow = lowpassLow * (1-fLow) + fLow * blurred;
+    blurred = lowpassHigh - lowpassLow;
+
+    // amplify
+    blurred *= alpha;
+
+    // resize back to original size
+    resize(blurred, outFloat, src.size(), 0, 0, CV_INTER_LINEAR);
+
+    // add back to original frame
+    outFloat += srcFloat;
+
+    // convert to 8 bit
+    outFloat.convertTo(out, CV_8U);
+  }
+}
 
 namespace kurento
 {
@@ -12,6 +97,13 @@ namespace pulsereader
 
 PulseReaderOpenCVImpl::PulseReaderOpenCVImpl ()
 {
+	this->maxSignalSize = 100;
+	this->relativeMinFaceSize = 0.4;
+	this->deleteFaceIn = 1;
+	this->holdPulseFor = 30;
+	this->fps = 0;
+	this->evm.alpha = 100;
+	this->first = true;
 }
 
 /*
@@ -21,16 +113,395 @@ PulseReaderOpenCVImpl::PulseReaderOpenCVImpl ()
  */
 void PulseReaderOpenCVImpl::process (cv::Mat &mat)
 {
-  // FIXME: Implement this
-  throw KurentoException (NOT_IMPLEMENTED, "PulseReaderOpenCVImpl::process: Not implemented");
+	flip(mat, mat, 1);
+	if (!drawing) {
+		mat.copyTo(processed);
+		onFrame(processed);
+	} else onFrame(mat);
 }
 
+void PulseReaderOpenCVImpl::onFrame(Mat &mat)
+{
+	if (first) {
+		const Size DIMENSIONS = mat.size();
+		width = DIMENSIONS.width;
+		height = DIMENSIONS.height;
+		float dim = min(width, height) * relativeMinFaceSize;	
+		minFaceSize = Size(dim, dim);
+		this->lastFaceDetectionTimestamp = 0;
+		this->lastBpmTimestamp = 0;
+		this->faces.clear();
+
+		classifier.load("/tmp/lbpcascade_frontalface.xml");
+	}
+
+	now = (double)cv::getTickCount();
+
+  if ((now - lastFaceDetectionTimestamp) * 1000. / cv::getTickFrequency() >= 1000) {
+    lastFaceDetectionTimestamp = now;
+
+    cv::cvtColor(mat, gray, CV_RGB2GRAY);
+    classifier.detectMultiScale(mat, boxes, 1.1, 3, 0, minFaceSize);
+
+    if (faces.size() <= boxes.size()) {
+      for (size_t i = 0; i < faces.size(); i++) {
+        Face& face = faces.at(i);
+        int boxIndex = face.nearestBox(boxes);
+        face.deleteIn = deleteFaceIn;
+        face.updateBox(boxes.at(boxIndex));
+        onFace(mat, face, boxes.at(boxIndex));
+        boxes.erase(boxes.begin() + boxIndex);
+      }
+
+      for (size_t i = 0; i < boxes.size(); i++) {
+        faces.push_back(Face(boxes.at(i), deleteFaceIn));
+        onFace(mat, faces.back(), boxes.at(i));
+      }
+    } else {
+      for (size_t i = 0; i < faces.size(); i++) {
+        faces.at(i).selected = false;
+      }
+      for (size_t i = 0; i < boxes.size(); i++) {
+        int faceIndex = nearestFace(boxes.at(i));
+        Face& face = faces.at(faceIndex);
+        face.selected = true;
+        face.deleteIn = deleteFaceIn;
+        face.updateBox(boxes.at(i));
+        onFace(mat, face, boxes.at(i));
+      }
+      for (size_t i = 0; i < faces.size(); i++) {
+        Face& face = faces.at(i);
+        if (!face.selected) {
+          if (face.deleteIn <= 0) {
+            faces.erase(faces.begin() + i);
+            i--;
+          } else {
+            face.deleteIn--;
+            onFace(mat, face, face.box);
+          }
+        }
+      }
+    }
+  } else {
+    for (size_t i = 0; i < faces.size(); i++) {
+      Face& face = faces.at(i);
+      onFace(mat, face, face.box);
+    }
+  }
+}
+
+int PulseReaderOpenCVImpl::nearestFace(const Rect& box)
+{
+	int index = -1;
+  int min = -1;
+  Point p;
+
+  // search for first unselected face
+  for (size_t i = 0; i < faces.size(); i++) {
+    if (!faces.at(i).selected) {
+      index = i;
+      p = box.tl() - faces.at(i).box.tl();
+      min = p.x * p.x + p.y * p.y;
+      break;
+    }
+  }
+
+  // no unselected face found
+  if (index == -1) {
+    return -1;
+  }
+
+  // compare with remaining unselected faces
+  for (size_t i = index + 1; i < faces.size(); i++) {
+    if (!faces.at(i).selected) {
+      p = box.tl() - faces.at(i).box.tl();
+      int d = p.x * p.x + p.y * p.y;
+      if (d < min) {
+        min = d;
+        index = i;
+      }
+    }
+  }
+
+  return index;	
+}
+
+void PulseReaderOpenCVImpl::onFace(Mat& mat, Face& face, const Rect& box)
+{
+	Mat roi = !evm.magnify
+    || (evm.magnify && face.existsPulse)
+    ? mat(face.evm.box) : face.evm.out;
+
+  if (evm.magnify) {
+    if (face.evm.evm.first || face.evm.evm.alpha != evm.alpha) {
+      face.reset();
+    }
+    face.evm.evm.alpha = evm.alpha;
+    face.evm.evm.onFrame(mat(face.evm.box), roi);
+  } else if (!face.evm.evm.first) {
+    face.reset();
+  }
+  if (face.raw.rows >= maxSignalSize) {
+    const int total = face.raw.rows;
+    face.raw.rowRange(1, total).copyTo(face.raw.rowRange(0, total - 1));
+    face.raw.pop_back();
+    face.timestamps.rowRange(1, total).copyTo(face.timestamps.rowRange(0, total - 1));
+    face.timestamps.pop_back();
+  }
+
+  face.raw.push_back<double>(mean(roi)(1));
+  face.timestamps.push_back<double>(getTickCount());
+
+  Scalar rawStdDev;
+  meanStdDev(face.raw, Scalar(), rawStdDev);
+  const bool stable = rawStdDev(0) <= (evm.magnify ? 1 : 0) * evm.alpha * 0.045 + 1;
+
+  if (stable) {
+    currentFps = this->fps;
+    if (currentFps == 0) {
+      const double diff = (face.timestamps(face.timestamps.rows - 1) - face.timestamps(0)) * 1000. / getTickFrequency();
+      currentFps = face.timestamps.rows * 1000 / diff;
+    }
+
+    detrend<double>(face.raw, face.pulse, currentFps / 2);
+    normalization(face.pulse, face.pulse);
+    meanFilter(face.pulse, face.pulse);
+
+    peaks(face);
+  } else {
+    face.existsPulse = false;
+    *existsPulse = false;
+    face.reset();
+  }
+
+  if (face.existsPulse) {
+    bpm(face);
+  }
+  if (!face.existsPulse) {
+    if (face.pulse.rows == face.raw.rows) {
+      face.pulse = 0;
+    } else {
+      face.pulse = Mat1d::zeros(face.raw.rows, 1);
+    }
+    face.peaks.clear();
+    face.bpms.pop_back(face.bpms.rows);
+    face.bpm = 0;
+  }
+  *pulse = face.bpm;
+  if (drawing) draw(mat, face, box);	
+}
+
+void PulseReaderOpenCVImpl::peaks(Face& face)
+{
+  face.peaks.clear();
+  int lastIndex = 0;
+  // int lastPeakIndex = 0;
+  int lastPeakTimestamp = face.timestamps(0);
+  int lastPeakValue = face.pulse(0);
+  double peakValueThreshold = 0;
+
+  for (int i = 1; i < face.raw.rows; i++) {
+    const double diff = (face.timestamps(i) - face.timestamps(lastIndex)) * 1000. / getTickFrequency();
+    if (diff >= 200) {
+      int relativePeakIndex[2];
+      double peakValue;
+      minMaxIdx(face.pulse.rowRange(lastIndex, i+1), 0, &peakValue, 0, &relativePeakIndex[0]);
+      const int peakIndex = lastIndex + relativePeakIndex[0];
+
+      if (peakValue > peakValueThreshold && lastIndex < peakIndex && peakIndex < i) {
+        const double peakTimestamp = face.timestamps(peakIndex);
+        const double peakDiff = (peakTimestamp - lastPeakTimestamp) * 1000. / getTickFrequency();
+        if (peakDiff <= 200 && peakValue > lastPeakValue) {
+          face.peaks.pop();
+        }
+        if (peakDiff > 200 || peakValue > lastPeakValue) {
+          face.peaks.push(peakIndex, peakTimestamp, peakValue);
+
+          // lastPeakIndex = peakIndex;
+          lastPeakTimestamp = peakTimestamp;
+          lastPeakValue = peakValue;
+
+          peakValueThreshold = 0.6 * mean(face.peaks.values)(0);
+        }
+      }
+
+      lastIndex = i;
+    }
+  }
+
+  Scalar peakValuesStdDev;
+  meanStdDev(face.peaks.values, Scalar(), peakValuesStdDev);
+  const double diff = (face.timestamps(face.raw.rows - 1) - face.timestamps(0)) / getTickFrequency();
+
+  Scalar peakTimestampsStdDev;
+  if (face.peaks.indices.rows >= 3) {
+    meanStdDev((face.peaks.timestamps.rowRange(1, face.peaks.timestamps.rows) - 
+      face.peaks.timestamps.rowRange(0, face.peaks.timestamps.rows - 1)) / getTickFrequency(), 
+      Scalar(), peakTimestampsStdDev);
+  }
+
+  bool validPulse = 
+      2 <= face.peaks.indices.rows &&
+      40/60 * diff <= face.peaks.indices.rows &&
+      face.peaks.indices.rows <= 240/60 * diff &&
+      peakValuesStdDev(0) <= 0.5 &&
+      peakTimestampsStdDev(0) <= 0.5;
+
+  if (!face.existsPulse && validPulse) {
+    face.noPulseIn = holdPulseFor;
+    face.existsPulse = true;
+    *existsPulse = true;
+  } else if (face.existsPulse && !validPulse) {
+    if (face.noPulseIn > 0) face.noPulseIn--;
+    else {
+    	face.existsPulse = false;
+    	*existsPulse = false;
+    }
+  }
+}
+
+void PulseReaderOpenCVImpl::Face::Peaks::push(int index, double timestamp, double value)
+{
+  indices.push_back<int>(index);
+  timestamps.push_back<double>(timestamp);
+  values.push_back<double>(value);	
+}
+
+void PulseReaderOpenCVImpl::Face::Peaks::pop()
+{
+  indices.pop_back(min(indices.rows, 1));
+  timestamps.pop_back(min(timestamps.rows, 1));
+  values.pop_back(min(values.rows, 1));
+}
+
+void PulseReaderOpenCVImpl::Face::Peaks::clear() {
+    indices.pop_back(indices.rows);
+    timestamps.pop_back(timestamps.rows);
+    values.pop_back(values.rows);
+}
+
+void PulseReaderOpenCVImpl::bpm(Face& face)
+{
+  dft(face.pulse, powerSpectrum);
+  const int total = face.raw.rows;
+
+  const int low = total * 40./60./currentFps + 1;
+  const int high = total * 240./60./currentFps + 1;
+  powerSpectrum.rowRange(0, min((size_t)low, (size_t)total)) = ZERO;
+  powerSpectrum.pop_back(min((size_t)(total - high), (size_t)total));
+
+  pow(powerSpectrum, 2, powerSpectrum);
+
+  if (!powerSpectrum.empty()) {
+    int idx[2];
+    minMaxIdx(powerSpectrum, 0, 0, 0, &idx[0]);
+
+    face.bpms.push_back<double>(idx[0] * currentFps * 30. / total);
+  }
+
+  if (face.bpm == 0 || (now - lastBpmTimestamp) * 1000. / getTickFrequency() >= 1000.) {
+    lastBpmTimestamp = getTickCount();
+
+    face.bpm = mean(face.bpms)(0);
+    face.bpms.pop_back(face.bpms.rows);
+
+    if (face.bpm <= 40) {
+      face.existsPulse = false;
+      *existsPulse = false;
+    }
+  }	
+}
+
+void PulseReaderOpenCVImpl::draw(Mat& mat, const Face& face, const Rect& box) 
+{
+  rectangle(mat, box, BLUE);
+  rectangle(mat, face.box, BLUE, 2);
+  rectangle(mat, face.evm.box, GREEN);
+
+  Point bl = face.box.tl() + Point(0, face.box.height);
+  Point g;
+  for (int i = 0; i < face.raw.rows; i++) {
+    g = bl + Point(i, -face.raw(i) + 50);
+    line(mat, g, g, GREEN);
+    g = bl + Point(i, -face.pulse(i) * 10 - 50);
+    line(mat, g, g, RED, face.existsPulse ? 2 : 1);
+  }
+
+  for (int i = 0; i < face.peaks.indices.rows; i++) {
+    const int index = face.peaks.indices(i);
+    g = bl + Point(index, -face.pulse(index) * 10 - 50);
+    circle(mat, g, 1, BLUE, 2);
+  }
+
+  stringstream ss;
+
+  ss.str("");
+
+  ss.precision(3);
+  ss << face.bpm;
+  putText(mat, ss.str(), bl, FONT_HERSHEY_SIMPLEX, 2, RED, 2);
+}
+
+PulseReaderOpenCVImpl::Face::Face (const Rect& box, int deleteIn) 
+{
+  this->box = box;
+  this->deleteIn = deleteIn;
+  this->updateBox(this->box);
+  this->existsPulse = false;
+  this->noPulseIn = 0;
+}
+
+int PulseReaderOpenCVImpl::Face::nearestBox(const vector<Rect>& boxes) 
+{
+  if (boxes.empty()) {
+    return -1;
+  }
+  int index = 0;
+  Point p = box.tl() - boxes.at(0).tl();
+  int min = p.x * p.x + p.y * p.y;
+  for (size_t i = 1; i < boxes.size(); i++) {
+    p = box.tl() - boxes.at(i).tl();
+    int d = p.x * p.x + p.y * p.y;
+    if (d < min) {
+      min = d;
+      index = i;
+    }
+  }
+  return index;
+}
+
+void PulseReaderOpenCVImpl::Face::updateBox(const Rect& a) 
+{
+  // update box position and size
+  Point p = box.tl() - a.tl();
+  double d = (p.x * p.x + p.y * p.y) / pow(box.width / 3., 2.);
+
+  // TODO: bring interpolate back at some point
+
+  cv::interpolate(box, a, box, min(1.0, d));
+
+  // update EVM box
+  Point c = box.tl() + Point(box.size().width * .5, box.size().height * .5);
+  Point r(box.width * .275, box.height * .425);
+  evm.box = Rect(c - r, c + r);
+}
+
+void PulseReaderOpenCVImpl::Face::reset()
+{
+	evm.evm.first = true;
+	raw.pop_back(raw.rows);
+	timestamps.pop_back(timestamps.rows);
+}
 
 
 void PulseReaderOpenCVImpl::setOverlay (bool overlaySet)
 {
-  // FIXME: Implement this
-  throw KurentoException (NOT_IMPLEMENTED, "PulseReaderOpenCVImpl::setOverlay: Not implemented");
+	drawing = overlaySet;
+}
+
+void PulseReaderOpenCVImpl::setId (int value)
+{
+	*id = value;
 }
 
 } /* pulsereader */
