@@ -86,6 +86,20 @@ std::shared_ptr<MediaPipeline> PulseReaderConstructor::getMediaPipeline ()
 
 int PulseReaderConstructor::getId ()
 {
+  if (!__isSetId && !__isSetDefaultId) {
+    try {
+      kurento::JsonSerializer s (false);
+      Json::Reader reader;
+      std::string defaultValue = "0";
+
+      reader.parse (defaultValue, s.JsonValue["id"]);
+      s.SerializeNVP (id);
+      __isSetDefaultId = true;
+    } catch (std::exception &e) {
+      std::cerr << "Unexpected exception deserializing default value id of PulseReader constructor, check your module: " << e.what() << std::endl;
+    }
+  }
+
   return id;
 }
 
@@ -113,7 +127,9 @@ void PulseReaderConstructor::Serialize (kurento::JsonSerializer &s)
   if (s.IsWriter) {
     s.SerializeNVP (mediaPipeline);
 
-    s.SerializeNVP (id);
+    if (__isSetId) {
+      s.SerializeNVP (id);
+    }
 
     if (__isSetOverlay) {
       s.SerializeNVP (overlay);
@@ -135,12 +151,15 @@ void PulseReaderConstructor::Serialize (kurento::JsonSerializer &s)
 
     s.SerializeNVP (mediaPipeline);
 
-    if (!s.JsonValue.isMember ("id") || !s.JsonValue["id"].isConvertibleTo (Json::ValueType::intValue) ) {
-      throw KurentoException (MARSHALL_ERROR,
-                              "'id' parameter should be a integer");
+    if (s.JsonValue.isMember ("id") ) {
+      if (s.JsonValue["id"].isConvertibleTo (Json::ValueType::intValue) ) {
+        __isSetId = true;
+        s.SerializeNVP (id);
+      } else {
+        throw KurentoException (MARSHALL_ERROR,
+                                "'id' parameter should be a integer");
+      }
     }
-
-    s.SerializeNVP (id);
 
     if (s.JsonValue.isMember ("overlay") ) {
       if (s.JsonValue["overlay"].isConvertibleTo (Json::ValueType::booleanValue) ) {

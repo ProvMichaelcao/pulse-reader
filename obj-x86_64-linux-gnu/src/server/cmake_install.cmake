@@ -51,7 +51,7 @@ ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unsp
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   FOREACH(file
-      "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/x86_64-linux-gnu/libkmspulsereaderimpl.so.0.0.1~1.ga84ed5a"
+      "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/x86_64-linux-gnu/libkmspulsereaderimpl.so.0.0.1~3.g45ab6f4"
       "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/x86_64-linux-gnu/libkmspulsereaderimpl.so.0"
       "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/x86_64-linux-gnu/libkmspulsereaderimpl.so"
       )
@@ -63,12 +63,12 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
     ENDIF()
   ENDFOREACH()
   FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/x86_64-linux-gnu" TYPE SHARED_LIBRARY FILES
-    "/home/parallels/src/modules/pulsereader/pulse-reader/obj-x86_64-linux-gnu/src/server/libkmspulsereaderimpl.so.0.0.1~1.ga84ed5a"
+    "/home/parallels/src/modules/pulsereader/pulse-reader/obj-x86_64-linux-gnu/src/server/libkmspulsereaderimpl.so.0.0.1~3.g45ab6f4"
     "/home/parallels/src/modules/pulsereader/pulse-reader/obj-x86_64-linux-gnu/src/server/libkmspulsereaderimpl.so.0"
     "/home/parallels/src/modules/pulsereader/pulse-reader/obj-x86_64-linux-gnu/src/server/libkmspulsereaderimpl.so"
     )
   FOREACH(file
-      "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/x86_64-linux-gnu/libkmspulsereaderimpl.so.0.0.1~1.ga84ed5a"
+      "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/x86_64-linux-gnu/libkmspulsereaderimpl.so.0.0.1~3.g45ab6f4"
       "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/x86_64-linux-gnu/libkmspulsereaderimpl.so.0"
       "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/x86_64-linux-gnu/libkmspulsereaderimpl.so"
       )

@@ -5,10 +5,10 @@
 #
 #=============================================================================
 
-set(PACKAGE_VERSION "0.0.1~1.ga84ed5a")
+set(PACKAGE_VERSION "0.0.1~3.g45ab6f4")
 set(KMSPULSEREADER_VERSION ${PACKAGE_VERSION})
 
-message (STATUS "Looking for KMSPULSEREADER: 0.0.1~1.ga84ed5a")
+message (STATUS "Looking for KMSPULSEREADER: 0.0.1~3.g45ab6f4")
 
 include (GenericFind)
 

@@ -82,6 +82,8 @@ public:
 
   void setId (int id) {
     this->id = id;
+    __isSetId = true;
+    __isSetDefaultId = false;
   }
 
   bool getOverlay ();
@@ -95,6 +97,8 @@ public:
 private:
   std::shared_ptr<MediaPipeline> mediaPipeline;
   int id;
+  bool __isSetId = false;
+  bool __isSetDefaultId = false;
   bool overlay;
   bool __isSetOverlay = false;
   bool __isSetDefaultOverlay = false;
