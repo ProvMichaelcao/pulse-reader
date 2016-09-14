@@ -16,7 +16,8 @@
 				  {
 				  	"name": "id",
 				  	"doc": "int to identify endpoint",
-				  	"type": "int"
+				  	"type": "int",
+				  	"optional": true
 				  },
 				  {
 				  	"name": "overlay",
