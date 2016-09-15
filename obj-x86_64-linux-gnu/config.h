@@ -2,7 +2,7 @@
 #define __PULSE_READER_CONFIG_H__
 
 /* Version */
-#define VERSION "0.0.1~3.g45ab6f4"
+#define VERSION "0.0.1~4.g51e5d73"
 
 /* Package name */
 #define PACKAGE "pulse-reader"

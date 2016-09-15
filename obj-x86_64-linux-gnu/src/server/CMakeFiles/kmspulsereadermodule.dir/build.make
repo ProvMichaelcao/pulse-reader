@@ -199,7 +199,7 @@ src/server/libkmspulsereadermodule.so: src/server/CMakeFiles/kmspulsereadermodul
 src/server/libkmspulsereadermodule.so: src/server/CMakeFiles/kmspulsereadermodule.dir/module_descriptor.cpp.o
 src/server/libkmspulsereadermodule.so: src/server/CMakeFiles/kmspulsereadermodule.dir/module_generation_time.cpp.o
 src/server/libkmspulsereadermodule.so: src/server/CMakeFiles/kmspulsereadermodule.dir/build.make
-src/server/libkmspulsereadermodule.so: src/server/libkmspulsereaderimpl.so.0.0.1~3.g45ab6f4
+src/server/libkmspulsereadermodule.so: src/server/libkmspulsereaderimpl.so.0.0.1~4.g51e5d73
 src/server/libkmspulsereadermodule.so: src/server/libkmspulsereaderinterface.a
 src/server/libkmspulsereadermodule.so: /usr/lib/x86_64-linux-gnu/libkmselementsimpl.so
 src/server/libkmspulsereadermodule.so: /usr/lib/x86_64-linux-gnu/libkmsfiltersimpl.so

@@ -16,8 +16,8 @@ SET(CMAKE_MULTIPLE_OUTPUT_PAIRS
   "/home/parallels/src/modules/pulsereader/pulse-reader/obj-x86_64-linux-gnu/src/server/implementation/generated-cpp/PulseReaderImplFactory.hpp" "/home/parallels/src/modules/pulsereader/pulse-reader/obj-x86_64-linux-gnu/src/server/cpp_server_internal.generated"
   "/home/parallels/src/modules/pulsereader/pulse-reader/obj-x86_64-linux-gnu/src/server/implementation/generated-cpp/PulseReaderImplInternal.cpp" "/home/parallels/src/modules/pulsereader/pulse-reader/obj-x86_64-linux-gnu/src/server/cpp_server_internal.generated"
   "/home/parallels/src/modules/pulsereader/pulse-reader/obj-x86_64-linux-gnu/src/server/implementation/generated-cpp/SerializerExpanderPulsereader.cpp" "/home/parallels/src/modules/pulsereader/pulse-reader/obj-x86_64-linux-gnu/src/server/cpp_server_internal.generated"
-  "/home/parallels/src/modules/pulsereader/pulse-reader/obj-x86_64-linux-gnu/src/server/libkmspulsereaderimpl.so" "/home/parallels/src/modules/pulsereader/pulse-reader/obj-x86_64-linux-gnu/src/server/libkmspulsereaderimpl.so.0.0.1~3.g45ab6f4"
-  "/home/parallels/src/modules/pulsereader/pulse-reader/obj-x86_64-linux-gnu/src/server/libkmspulsereaderimpl.so.0" "/home/parallels/src/modules/pulsereader/pulse-reader/obj-x86_64-linux-gnu/src/server/libkmspulsereaderimpl.so.0.0.1~3.g45ab6f4"
+  "/home/parallels/src/modules/pulsereader/pulse-reader/obj-x86_64-linux-gnu/src/server/libkmspulsereaderimpl.so" "/home/parallels/src/modules/pulsereader/pulse-reader/obj-x86_64-linux-gnu/src/server/libkmspulsereaderimpl.so.0.0.1~4.g51e5d73"
+  "/home/parallels/src/modules/pulsereader/pulse-reader/obj-x86_64-linux-gnu/src/server/libkmspulsereaderimpl.so.0" "/home/parallels/src/modules/pulsereader/pulse-reader/obj-x86_64-linux-gnu/src/server/libkmspulsereaderimpl.so.0.0.1~4.g51e5d73"
   )
 
 

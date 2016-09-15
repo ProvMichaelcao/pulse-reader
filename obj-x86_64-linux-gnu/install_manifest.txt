@@ -4,7 +4,7 @@
 /usr/include/kurento/modules/pulsereader/PulseUndetected.hpp
 /usr/include/kurento/modules/pulsereader/FrameData.hpp
 /usr/lib/x86_64-linux-gnu/pkgconfig/kmspulsereader.pc
-/usr/lib/x86_64-linux-gnu/libkmspulsereaderimpl.so.0.0.1~3.g45ab6f4
+/usr/lib/x86_64-linux-gnu/libkmspulsereaderimpl.so.0.0.1~4.g51e5d73
 /usr/lib/x86_64-linux-gnu/libkmspulsereaderimpl.so.0
 /usr/lib/x86_64-linux-gnu/libkmspulsereaderimpl.so
 /usr/include/kurento/modules/pulsereader/PulseReaderOpenCVImpl.hpp

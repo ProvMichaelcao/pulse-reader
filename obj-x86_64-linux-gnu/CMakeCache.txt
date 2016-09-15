@@ -263,7 +263,7 @@ KMSELEMENTS_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libkmselementsimpl.so
 KMSELEMENTS_REQ_VERSION:STRING=^6.0.0
 
 //KMSELEMENTS Version
-KMSELEMENTS_VERSION:PATH=6.5.1~78.g3fcd69a
+KMSELEMENTS_VERSION:PATH=6.6.1~1.gb7dae80
 
 //KMSFILTERS_FOUND
 KMSFILTERS_FOUND:BOOL=TRUE
@@ -287,7 +287,7 @@ KMSFILTERS_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libkmsfiltersimpl.so
 KMSFILTERS_REQ_VERSION:STRING=^6.0.0
 
 //KMSFILTERS Version
-KMSFILTERS_VERSION:PATH=6.5.1~1.ge5b1703
+KMSFILTERS_VERSION:PATH=6.6.1~1.g9acbf2d
 
 //Branch of kurento-client-js repository to get templates from
 KURENTO_CLIENT_JS_BRANCH:STRING=master
@@ -319,7 +319,7 @@ KurentoModuleCreator_LIBRARIES:PATH=
 KurentoModuleCreator_REQ_VERSION:STRING=^4.0.0
 
 //KurentoModuleCreator Version
-KurentoModuleCreator_VERSION:PATH=4.0.6-SNAPSHOT
+KurentoModuleCreator_VERSION:PATH=4.0.7-SNAPSHOT
 
 //pkg-config executable
 PKG_CONFIG_EXECUTABLE:FILEPATH=/usr/bin/pkg-config
@@ -511,13 +511,13 @@ ENABLE_CODE_GENERATION_FORMAT_CHECK-ADVANCED:INTERNAL=1
 //Details about finding Git
 FIND_PACKAGE_MESSAGE_DETAILS_Git:INTERNAL=[/usr/bin/git][v1.9.1()]
 //Details about finding KMSELEMENTS
-FIND_PACKAGE_MESSAGE_DETAILS_KMSELEMENTS:INTERNAL=[6.5.1~78.g3fcd69a][/usr/include/kurento/modules/core;/usr/include/gstreamer-1.5;/usr/lib/x86_64-linux-gnu/gstreamer-1.5/include;/usr/include/kurento;/usr/include/sigc++-2.0;/usr/lib/x86_64-linux-gnu/sigc++-2.0/include;/usr/include/glibmm-2.4;/usr/lib/x86_64-linux-gnu/glibmm-2.4/include;/usr/include/glib-2.0;/usr/lib/x86_64-linux-gnu/glib-2.0/include;/usr/include/kmsjsoncpp;/usr/include/kurento/modules/elements;/usr/include/kurento/modules/elements;/usr/include/kurento/modules/elements;/usr/include/kurento/modules/elements][/usr/lib/x86_64-linux-gnu/libkmselementsimpl.so][/usr/lib/x86_64-linux-gnu/libkmselementsimpl.so;kmscoreimpl;gstreamer-1.5;gstsdp-1.5;jsonrpc;glibmm-2.4;kmsjsoncpp;gobject-2.0;sigc-2.0;glib-2.0][/usr/include/kurento/modules/elements][/usr/include/kurento/modules/elements][/usr/include/kurento/modules/elements][/usr/include/kurento/modules/elements][v6.5.1~78.g3fcd69a()]
+FIND_PACKAGE_MESSAGE_DETAILS_KMSELEMENTS:INTERNAL=[6.6.1~1.gb7dae80][/usr/include/kurento/modules/core;/usr/include/gstreamer-1.5;/usr/lib/x86_64-linux-gnu/gstreamer-1.5/include;/usr/include/kurento;/usr/include/sigc++-2.0;/usr/lib/x86_64-linux-gnu/sigc++-2.0/include;/usr/include/glibmm-2.4;/usr/lib/x86_64-linux-gnu/glibmm-2.4/include;/usr/include/glib-2.0;/usr/lib/x86_64-linux-gnu/glib-2.0/include;/usr/include/kmsjsoncpp;/usr/include/kurento/modules/elements;/usr/include/kurento/modules/elements;/usr/include/kurento/modules/elements;/usr/include/kurento/modules/elements][/usr/lib/x86_64-linux-gnu/libkmselementsimpl.so][/usr/lib/x86_64-linux-gnu/libkmselementsimpl.so;kmscoreimpl;gstreamer-1.5;gstsdp-1.5;jsonrpc;glibmm-2.4;kmsjsoncpp;gobject-2.0;sigc-2.0;glib-2.0][/usr/include/kurento/modules/elements][/usr/include/kurento/modules/elements][/usr/include/kurento/modules/elements][/usr/include/kurento/modules/elements][v6.6.1~1.gb7dae80()]
 //Details about finding KMSFILTERS
-FIND_PACKAGE_MESSAGE_DETAILS_KMSFILTERS:INTERNAL=[6.5.1~1.ge5b1703][/usr/include/kurento/modules/core;/usr/include/gstreamer-1.5;/usr/lib/x86_64-linux-gnu/gstreamer-1.5/include;/usr/include/kurento;/usr/include/sigc++-2.0;/usr/lib/x86_64-linux-gnu/sigc++-2.0/include;/usr/include/glibmm-2.4;/usr/lib/x86_64-linux-gnu/glibmm-2.4/include;/usr/include/glib-2.0;/usr/lib/x86_64-linux-gnu/glib-2.0/include;/usr/include/kmsjsoncpp;/usr/include/kurento/modules/core;/usr/include/gstreamer-1.5;/usr/lib/x86_64-linux-gnu/gstreamer-1.5/include;/usr/include/kurento;/usr/include/sigc++-2.0;/usr/lib/x86_64-linux-gnu/sigc++-2.0/include;/usr/include/glibmm-2.4;/usr/lib/x86_64-linux-gnu/glibmm-2.4/include;/usr/include/glib-2.0;/usr/lib/x86_64-linux-gnu/glib-2.0/include;/usr/include/kmsjsoncpp;/usr/include/kurento/modules/elements;/usr/include/kurento/modules/elements;/usr/include/kurento/modules/elements;/usr/include/kurento/modules/elements;/usr/include/kurento/modules/filters;/usr/include/kurento/modules/filters;/usr/include/kurento/modules/filters;/usr/include/kurento/modules/filters;/usr/include/opencv][/usr/lib/x86_64-linux-gnu/libkmsfiltersimpl.so][/usr/lib/x86_64-linux-gnu/libkmsfiltersimpl.so;kmscoreimpl;gstreamer-1.5;gstsdp-1.5;jsonrpc;glibmm-2.4;kmsjsoncpp;gobject-2.0;sigc-2.0;glib-2.0;/usr/lib/x86_64-linux-gnu/libkmselementsimpl.so;kmscoreimpl;gstreamer-1.5;gstsdp-1.5;jsonrpc;glibmm-2.4;kmsjsoncpp;gobject-2.0;sigc-2.0;glib-2.0;opencv_calib3d;opencv_contrib;opencv_core;opencv_features2d;opencv_flann;opencv_gpu;opencv_highgui;opencv_imgproc;opencv_legacy;opencv_ml;opencv_objdetect;opencv_ocl;opencv_photo;opencv_stitching;opencv_superres;opencv_ts;opencv_video;opencv_videostab;opencv_calib3d;opencv_contrib;opencv_core;opencv_features2d;opencv_flann;opencv_gpu;opencv_highgui;opencv_imgproc;opencv_legacy;opencv_ml;opencv_objdetect;opencv_ocl;opencv_photo;opencv_stitching;opencv_superres;opencv_ts;opencv_video;opencv_videostab][/usr/include/kurento/modules/filters][/usr/include/kurento/modules/filters][/usr/include/kurento/modules/filters][/usr/include/kurento/modules/filters][v6.5.1~1.ge5b1703()]
+FIND_PACKAGE_MESSAGE_DETAILS_KMSFILTERS:INTERNAL=[6.6.1~1.g9acbf2d][/usr/include/kurento/modules/core;/usr/include/gstreamer-1.5;/usr/lib/x86_64-linux-gnu/gstreamer-1.5/include;/usr/include/kurento;/usr/include/sigc++-2.0;/usr/lib/x86_64-linux-gnu/sigc++-2.0/include;/usr/include/glibmm-2.4;/usr/lib/x86_64-linux-gnu/glibmm-2.4/include;/usr/include/glib-2.0;/usr/lib/x86_64-linux-gnu/glib-2.0/include;/usr/include/kmsjsoncpp;/usr/include/kurento/modules/core;/usr/include/gstreamer-1.5;/usr/lib/x86_64-linux-gnu/gstreamer-1.5/include;/usr/include/kurento;/usr/include/sigc++-2.0;/usr/lib/x86_64-linux-gnu/sigc++-2.0/include;/usr/include/glibmm-2.4;/usr/lib/x86_64-linux-gnu/glibmm-2.4/include;/usr/include/glib-2.0;/usr/lib/x86_64-linux-gnu/glib-2.0/include;/usr/include/kmsjsoncpp;/usr/include/kurento/modules/elements;/usr/include/kurento/modules/elements;/usr/include/kurento/modules/elements;/usr/include/kurento/modules/elements;/usr/include/kurento/modules/filters;/usr/include/kurento/modules/filters;/usr/include/kurento/modules/filters;/usr/include/kurento/modules/filters;/usr/include/opencv][/usr/lib/x86_64-linux-gnu/libkmsfiltersimpl.so][/usr/lib/x86_64-linux-gnu/libkmsfiltersimpl.so;kmscoreimpl;gstreamer-1.5;gstsdp-1.5;jsonrpc;glibmm-2.4;kmsjsoncpp;gobject-2.0;sigc-2.0;glib-2.0;/usr/lib/x86_64-linux-gnu/libkmselementsimpl.so;kmscoreimpl;gstreamer-1.5;gstsdp-1.5;jsonrpc;glibmm-2.4;kmsjsoncpp;gobject-2.0;sigc-2.0;glib-2.0;opencv_calib3d;opencv_contrib;opencv_core;opencv_features2d;opencv_flann;opencv_gpu;opencv_highgui;opencv_imgproc;opencv_legacy;opencv_ml;opencv_objdetect;opencv_ocl;opencv_photo;opencv_stitching;opencv_superres;opencv_ts;opencv_video;opencv_videostab;opencv_calib3d;opencv_contrib;opencv_core;opencv_features2d;opencv_flann;opencv_gpu;opencv_highgui;opencv_imgproc;opencv_legacy;opencv_ml;opencv_objdetect;opencv_ocl;opencv_photo;opencv_stitching;opencv_superres;opencv_ts;opencv_video;opencv_videostab][/usr/include/kurento/modules/filters][/usr/include/kurento/modules/filters][/usr/include/kurento/modules/filters][/usr/include/kurento/modules/filters][v6.6.1~1.g9acbf2d()]
 //Details about finding KurentoHelpers
 FIND_PACKAGE_MESSAGE_DETAILS_KurentoHelpers:INTERNAL=[1.3.2~1.gaac1f6e][v1.3.2~1.gaac1f6e()]
 //Details about finding KurentoModuleCreator
-FIND_PACKAGE_MESSAGE_DETAILS_KurentoModuleCreator:INTERNAL=[4.0.6-SNAPSHOT][/usr/bin/kurento-module-creator][v4.0.6-SNAPSHOT()]
+FIND_PACKAGE_MESSAGE_DETAILS_KurentoModuleCreator:INTERNAL=[4.0.7-SNAPSHOT][/usr/bin/kurento-module-creator][v4.0.7-SNAPSHOT()]
 //Details about finding PkgConfig
 FIND_PACKAGE_MESSAGE_DETAILS_PkgConfig:INTERNAL=[/usr/bin/pkg-config][v0.26()]
 //ADVANCED property for variable: GIT_EXECUTABLE
@@ -687,7 +687,7 @@ KMSCORE_STATIC_LIBS:INTERNAL=
 KMSCORE_STATIC_LIBS_L:INTERNAL=
 KMSCORE_STATIC_LIBS_OTHER:INTERNAL=
 KMSCORE_STATIC_LIBS_PATHS:INTERNAL=
-KMSCORE_VERSION:INTERNAL=6.5.1-dev
+KMSCORE_VERSION:INTERNAL=6.6.1-dev
 KMSCORE_kmscore_INCLUDEDIR:INTERNAL=
 KMSCORE_kmscore_LIBDIR:INTERNAL=
 KMSCORE_kmscore_PREFIX:INTERNAL=

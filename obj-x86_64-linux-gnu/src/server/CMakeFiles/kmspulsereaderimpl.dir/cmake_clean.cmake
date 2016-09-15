@@ -9,7 +9,7 @@ FILE(REMOVE_RECURSE
   "CMakeFiles/kmspulsereaderimpl.dir/implementation/generated-cpp/PulseReaderImplInternal.cpp.o"
   "libkmspulsereaderimpl.pdb"
   "libkmspulsereaderimpl.so"
-  "libkmspulsereaderimpl.so.0.0.1~3.g45ab6f4"
+  "libkmspulsereaderimpl.so.0.0.1~4.g51e5d73"
   "libkmspulsereaderimpl.so.0"
 )
 

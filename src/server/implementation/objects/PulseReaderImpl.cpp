@@ -43,12 +43,16 @@ void PulseReaderImpl::postConstructor ()
 	GstBus *bus;
 	std::shared_ptr<MediaPipelineImpl> pipe;
 
+	GST_DEBUG("1");
 	FilterImpl::postConstructor();
 
+	GST_DEBUG("2");
 	pipe = std::dynamic_pointer_cast<MediaPipelineImpl>(getMediaPipeline());
 
+	GST_DEBUG("3");
 	bus = gst_pipeline_get_bus(GST_PIPELINE(pipe->getPipeline()));
 
+	GST_DEBUG("4");
 	bus_handler_id = register_signal_handler (G_OBJECT(bus),
 									 "message",
 									 std::function <void (GstElement *, GstMessage *)>
@@ -56,6 +60,7 @@ void PulseReaderImpl::postConstructor ()
 									 					  std::placeholders::_2)),
 									 std::dynamic_pointer_cast<PulseReaderImpl>
 									 (shared_from_this()));
+	GST_DEBUG("5");
 	g_object_unref(bus);
 }
 
@@ -85,11 +90,13 @@ PulseReaderImpl::PulseReaderImpl (const boost::property_tree::ptree &config, std
 
 void PulseReaderImpl::setOverlay (bool overlaySet)
 {
+  GST_DEBUG("6");
   PulseReaderOpenCVImpl::setOverlay (overlaySet);
 }
 
 void PulseReaderImpl::setId (int id)
 {
+  GST_DEBUG("7");
   PulseReaderOpenCVImpl::setId (id);
 }
 
